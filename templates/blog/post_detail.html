@@ -1,0 +1,280 @@
+{% load staticfiles %}
+{% load blog_tags %}
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>{{ post.title }} - MYOAK博客</title>
+    <meta name="description"
+          content="{{ post.excerpt }}">
+
+    <meta name="baidu-site-verification" content="zrOMmtTOGN"/>
+    <meta name="baidu-site-verification" content="P4tHfpqcOs"/>
+    <meta name="sogou_site_verification" content="9bi3GlnDEE"/>
+    <meta name="360-site-verification" content="42c39fbc48ca9a038facfe2510d81348"/>
+    <meta name="google-site-verification" content="DiMs9m8egbDyzbhH33-sFwnjVvcD-Z1RgLpJJOEZ0Co"/>
+    <meta name="msvalidate.01" content="B0D0B9D2DA976F9B83E4C817E6300B8D"/>
+
+    <link rel="stylesheet" type="text/css" href="{% static 'blog/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'blog/css/nprogress.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'blog/css/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'blog/css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <script src="{% static 'blog/js/jquery-2.1.4.min.js' %}"></script>
+    <script src="{% static 'blog/js/nprogress.js' %}"></script>
+    <script src="{% static 'blog/js/jquery.lazyload.min.js' %}"></script>
+
+    <!-- css -->
+    <link href="http://cdn.bootcss.com/highlight.js/9.12.0/styles/tomorrow-night-eighties.min.css" rel="stylesheet">
+    <link href='http://cdn.webfont.youziku.com/webfonts/nomal/104915/45410/5960a0d0f629d8056489605d.css'
+          rel='stylesheet' type='text/css'/>
+    <link rel="stylesheet" href="{% static 'easy_comment/css/comment.css' %}">
+
+    <!-- 代码块的高亮 -->
+    <link rel="stylesheet" href="{% static 'easy_comment/css/prism.css' %}">
+    <script src="{% static 'ckeditor/ckeditor/plugins/prism/lib/prism/prism_patched.min.js' %}"></script>
+
+    <!-- 引入 ECharts 文件 -->
+    <script src="{% static 'blog/js/echarts.min.js' %}"></script>
+    <script src="{% static 'blog/js/china.js' %}"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="//cdn.bootcss.com/highlightjs-line-numbers.js/1.1.0/highlightjs-line-numbers.min.js"></script>
+    <script>hljs.initLineNumbersOnLoad();</script>
+    <script src="https://use.fontawesome.com/d25c7d6f38.js"></script>
+    <script type="text/javascript" async
+            src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+    <script>
+        var _hmt = _hmt || [];
+        (function () {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?cf055c06e7a5e243e30a085664d40649";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+</head>
+<body class="single">
+<header class="header">
+    <nav class="navbar navbar-default navbar-fixed-top" id="navbar">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                        data-target="#header-navbar" aria-expanded="false"><span class="sr-only"></span> <span
+                        class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span></button>
+                <h1 class="logo hvr-bounce-in"><a href="{% url 'blog:index' %}" title="MYOAK博客首页"><img
+                        src="{% static 'blog/images/logo.png' %}" alt=""></a></h1>
+            </div>
+            <div class="collapse navbar-collapse" id="header-navbar">
+                <ul class="nav navbar-nav navbar-left">
+                    <li><a href="{% get_datascienceurl %}">数据科学</a></li>
+                    <li><a href="{% get_programmingurl %}">算法编程</a></li>
+                    <li><a href="{% get_talkurl %}">杂谈</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="{% url 'blog:tags' %}">标签</a></li>
+                    <li><a href="{% url 'blog:links' %}">友情链接</a></li>
+                    {% if user.is_authenticated %}
+                        <li><div class="dropdown">
+                            <button class="btn btn-basic dropdown-toggle user_option" hover-class="btn-hover" data-toggle="dropdown">{{ user.username }}
+                            <span class="caret"></span></button>
+                            <ul class="dropdown-menu">
+                              <li><a href="{% url 'password_change' %}?next={{ request.path }}">修改密码</a></li>
+                              <li class="divider"></li>
+                              <li><a href="{% url 'logout' %}?next={{ request.path }}">注销登录</a></li>
+                            </ul>
+                          </div></li>
+                    {% else %}
+                        <li><a href="{% url 'login' %}?next={{ request.path }}">登录</a></li>
+                        <li><a href="{% url 'users:register' %}?next={{ request.path }}">注册</a></li>
+                    {% endif %}
+                </ul>
+                <form class="navbar-form visible-xs" action="{% url 'haystack_search' %}" method="post">
+                    <div class="input-group">
+                        <input name="q" class="form-control" placeholder="请输入关键字" maxlength="20"
+                               autocomplete="off" type="search" required>
+                        <span class="input-group-btn"><button class="btn btn-default btn-search" name="search"
+                                                              type="submit">搜索</button></span></div>
+                </form>
+            </div>
+        </div>
+    </nav>
+</header>
+<section class="container" style="margin-top:80px">
+    <div class="content-wrap">
+        <div class="content">
+            <header class="article-header">
+                <h1 class="article-title">{{ post.title }}</h1>
+                <div class="article-meta"><span class="item article-meta-time">
+                    <time class="time" data-toggle="tooltip" data-placement="bottom" title="时间：{{ post.publish }}"><i
+                            class="glyphicon glyphicon-time"></i> {{ post.publish }}</time></span>
+                    <span class="item article-meta-source" data-toggle="tooltip" data-placement="bottom"
+                          title="作者：{{ post.author }}"><i class="glyphicon glyphicon-user"></i> {{ post.author }}</span>
+                    <span class="item article-meta-category" data-toggle="tooltip" data-placement="bottom"
+                          title="分类：{{ post.category.name }}"><i
+                            class="glyphicon glyphicon-list"></i> {{ post.category.name }}</span>
+                    <span class="item article-meta-views" data-toggle="tooltip" data-placement="bottom"
+                          title="查看：{{ post.views }}"><i
+                            class="glyphicon glyphicon-eye-open"></i> {{ post.views }}</span>
+                    <span class="item article-meta-views" data-toggle="tooltip" data-placement="bottom" title="标签"><i
+                            class="glyphicon glyphicon-tags"></i>&nbsp;{% for tag in post.tags.all %}
+                        <a href="{% url 'blog:tag' tag.pk %}" rel="tag">&nbsp;{{ tag.name }}</a>{% endfor %}</span>
+                </div>
+            </header>
+            <article class="article-content">
+                {{ post.body|safe }}
+            </article>
+            <div class="relates">
+                <div class="title">
+                    <h3>类似文章推荐</h3>
+                </div>
+                <ul>
+                    {% for post in similar_posts %}
+                        <li>
+                            <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+                        </li>
+                    {% empty %}
+                        暂无类似文章！
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="bdsharebuttonbox" style="padding: 20px 20px 20px 0px"><a href="#" class="bds_more"
+                                                                                 data-cmd="more"></a><a href="#"
+                                                                                                        class="bds_qzone"
+                                                                                                        data-cmd="qzone"
+                                                                                                        title="分享到QQ空间"></a><a
+                    href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a><a href="#" class="bds_weixin"
+                                                                                       data-cmd="weixin"
+                                                                                       title="分享到微信"></a><a href="#"
+                                                                                                            class="bds_sqq"
+                                                                                                            data-cmd="sqq"
+                                                                                                            title="分享到QQ好友"></a><a
+                    href="#" class="bds_fbook" data-cmd="fbook" title="分享到Facebook"></a><a href="#" class="bds_twi"
+                                                                                           data-cmd="twi"
+                                                                                           title="分享到Twitter"></a></div>
+            <script>window._bd_share_config = {
+                "common": {
+                    "bdSnsKey": {},
+                    "bdText": "",
+                    "bdMini": "2",
+                    "bdMiniList": false,
+                    "bdPic": "",
+                    "bdStyle": "1",
+                    "bdSize": "24"
+                }, "share": {}
+            };
+            with (document)0[(getElementsByTagName('head')[0] || body).appendChild(createElement('script')).src = 'http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion=' + ~(-new Date() / 36e5)];</script>
+        {% include 'easy_comment/comment_form.html' with post=post %}
+        {% include 'easy_comment/comment_list.html' with post=post %}
+        </div>
+    </div>
+    <aside class="sidebar">
+        <div class="widget widget_search">
+            <form class="navbar-form" action="{% url 'haystack_search' %}" method="get">
+                <div class="input-group">
+                    <input name="q" class="form-control" size="35" placeholder="请输入关键字"
+                           maxlength="15" autocomplete="off" type="search" required>
+                    <span class="input-group-btn">
+            <button class="btn btn-default btn-search" name="search" type="submit">搜索</button>
+            </span></div>
+            </form>
+        </div>
+        <div class="widget widget-tabs">
+            <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="active"><a href="#notice" aria-controls="notice" role="tab"
+                                                          data-toggle="tab">网站公告</a></li>
+                <li role="presentation"><a href="#statistics" aria-controls="contact" role="tab"
+                                           data-toggle="tab">站点统计</a></li>
+                <li role="presentation"><a href="#contact" aria-controls="contact" role="tab"
+                                           data-toggle="tab">联系我</a></li>
+            </ul>
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane notice active" id="notice">
+                    <ul>
+                        <li>欢迎访问 MYOAK 博客!</li>
+                        <li>
+                            <time datetime="2018-01-01">01-01</time>
+                            <a href="{% url 'blog:index' %}#AI">模块【AI及大数据前沿】将更新近期的技术动向</a></li>
+                        <li>
+                            <time datetime="2018-01-01">01-01</time>
+                            小提示：【Ctrl+D】收藏网站
+                        </li>
+                        <li>
+                            <time datetime="2018-01-01">01-01</time>
+                            <a href="{% url 'rss' %}">小提示：点击此链接进行【RSS】订阅</a></li>
+                    </ul>
+                </div>
+                <div role="tabpanel" class="tab-pane contact" id="statistics">
+                    <li>博客已运行&nbsp<span class="label label-default">{% get_blogtime %}</span>&nbsp天</li>
+                    <li>共计&nbsp<span class="label label-default">{% total_posts %}</span>&nbsp篇文章</li>
+                    <li>文章总浏览量&nbsp<span class="label label-default">{% get_totalviews %}</span></li>
+                    <li>博主已经&nbsp<span class="label label-default">{% days_noupdate %}</span>&nbsp天没有更新博客了！</li>
+                </div>
+                <div role="tabpanel" class="tab-pane contact" id="contact">
+                    <div>对机器学习，深度学习，大数据感兴趣的朋友可以加我QQ。讨论相关技术及其应用，相应产品开发，对应工作等问题。互相学习，共同进步。</div>
+                    <div style="margin-top: 20px">
+                        <ul class="social">
+                            <li class="facebook"><a data-toggle="modal" data-target="#myQQ" rel="nofollow"><span><i
+                                    class="fa fa-qq" aria-hidden="true"></i></span></a></li>
+                            <li class="twitter"><a href="https://github.com/OakSuen" target="_blank"><span
+                                    class="ion-social-github"></span></a></li>
+                            <li class="twitter"><a href="mailto:695183616@qq.com"><span class="ion-email"></span></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="fixed">
+            <div class="widget widget_article_content">
+                <h3>文章目录</h3>
+                {{ post.toc|safe }}
+            </div>
+        </div>
+    </aside>
+</section>
+<footer class="footer">
+    <div class="container">
+        <p>Copyright &copy; 2017 <a href="">MYOAK</a></p>
+    </div>
+</footer>
+<script>
+    $(document).ready(function () {
+        $("article").find("img").attr({"alt": "{{ post.title }}", "data-action": "zoom"});
+    });
+</script>
+<script>$(".django-ckeditor-widget").removeAttr('style');</script>
+<link href="https://cdn.jsdelivr.net/npm/zoom-vanilla.js/dist/zoom.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/zoom-vanilla.js/dist/zoom-vanilla.min.js"></script>
+<script src="{% static 'blog/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'blog/js/jquery.ias.js' %}"></script>
+<script src="{% static 'blog/js/scripts.js' %}"></script>
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        }
+        else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+<script>
+    (function () {
+        var src = (document.location.protocol == "http:") ? "http://js.passport.qihucdn.com/11.0.1.js?d8eb692597b69c17900ce3f5ba7fd7d4" : "https://jspassport.ssl.qhimg.com/11.0.1.js?d8eb692597b69c17900ce3f5ba7fd7d4";
+        document.write('<script src="' + src + '" id="sozz"><\/script>');
+    })();
+</script>
+</body>
+</html>
+
