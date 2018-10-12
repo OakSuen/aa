@@ -138,13 +138,13 @@ $(window).scroll(function() {
 });
 
 
-/*禁止键盘操作*/
-document.onkeydown = function(event) {
-    var e = event || window.event || arguments.callee.caller.arguments[0];
-    if ((e.keyCode === 123) || (e.ctrlKey) || (e.ctrlKey) && (e.keyCode === 85)) {
-        return false;
-    }
-};
+// /*禁止键盘操作*/
+// document.onkeydown = function(event) {
+//     var e = event || window.event || arguments.callee.caller.arguments[0];
+//     if ((e.keyCode === 123) || (e.ctrlKey) || (e.ctrlKey) && (e.keyCode === 85)) {
+//         return false;
+//     }
+// };
 
 /*文章评论*/
 $(function() {
@@ -196,8 +196,8 @@ function replace_em(str) {
 //Console
 try {
     if (window.console && window.console.log) {
-        console.log("\n欢迎访问MYOAK博客！\n\n在本站可以看到前端技术，后端程序，网站内容管理系统等文章；\n\n还有我的程序人生！！！\n");
-        console.log("\n请记住我们的网址：%c www.myoak.info", "color:red");
+        console.log("\n欢迎访问MYOAK博客！\n\n在本站可以看到大数据，人工智能，算法编程方面的技术文章以及最新技术动态；\n\n还有自己的一些杂谈。\n");
+        console.log("\n请记住本站的网址：%c www.myoak.info", "color:red");
         console.log("\nPOWERED BY WY ALL RIGHTS RESERVED");
     }
 } catch (e) {};
@@ -240,3 +240,6 @@ chinaz.prototype = {
 }
 
 var chinaz = new chinaz();
+
+/*banner*/
+$('#banner').easyFader();

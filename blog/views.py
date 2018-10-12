@@ -1,11 +1,13 @@
 from django.shortcuts import render, get_object_or_404
 from blog.models import Post, Category, Tag
+from django.shortcuts import render_to_response
 from django.views.generic import ListView, DetailView, TemplateView
 from django.utils.text import slugify
 from markdown.extensions.toc import TocExtension
 from django.db.models import Q
 from django.db.models import Count
 import markdown
+from django.http import HttpResponse
 
 
 class baseView(ListView):
@@ -278,7 +280,7 @@ class PostDetailView(DetailView):
         context = super(PostDetailView, self).get_context_data(**kwargs)
         post_tags_ids = self.object.tags.values_list('id', flat=True)
         similar_posts = Post.objects.all().filter(tags__in=post_tags_ids).exclude(id=self.object.id)
-        similar_posts = similar_posts.annotate(same_tags=Count('tags')).order_by('-same_tags', '-publish')[:4]
+        similar_posts = similar_posts.annotate(same_tags=Count('tags')).order_by('-same_tags', '-publish')[:8]
 
         context.update({'similar_posts': similar_posts})
         return context
@@ -330,3 +332,10 @@ def search(request):
 def news_list(request):
     return render(request, 'blog/news.html')
 
+
+def page_not_found(request):
+    return render_to_response('blog/404.html')
+
+
+def page_error(request):
+    return HttpResponse(status=404)

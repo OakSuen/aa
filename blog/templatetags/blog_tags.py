@@ -34,10 +34,16 @@ def show_most_viewed_posts(count=15):
 
 
 @register.simple_tag
-def get_blogtime():
+def get_blogtime(index):
     d1 = datetime.date(2017, 6, 30)
     d2 = datetime.date(datetime.datetime.now().year, datetime.datetime.now().month, datetime.datetime.now().day)
-    return (d2 - d1).days
+    total_days = (d2 - d1).days
+    year = total_days // 365
+    days_after_year = total_days % 365
+    if index == 0:
+        return year
+    else:
+        return days_after_year
 
 
 @register.simple_tag

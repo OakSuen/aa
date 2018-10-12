@@ -22,6 +22,10 @@ from blog.sitemaps import PostSitemap
 from django.conf.urls.static import static
 from django.conf import settings
 import notifications.urls
+from django.views.generic import TemplateView
+
+handler404 = "blog.views.page_not_found"
+handler500 = "blog.views.page_error"
 
 sitemaps = {
     'posts': PostSitemap
@@ -38,4 +42,7 @@ urlpatterns = [
     url(r'', include('ckeditor_uploader.urls')),
     url(r'', include('easy_comment.urls')),
     url(r'^notifications/', include(notifications.urls, namespace='notifications')),
+    url(r'^silian\.txt$', TemplateView.as_view(template_name='silian.txt', content_type='text/plain')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+

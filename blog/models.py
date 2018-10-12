@@ -74,6 +74,7 @@ class News(models.Model):
     title = models.CharField(max_length=70)
     body = models.TextField()
     publish = models.DateTimeField(default=timezone.now)
+    article_link = models.CharField(max_length=400, default="")
 
     class Meta:
         ordering = ('-publish',)

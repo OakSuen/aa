@@ -1,5 +1,6 @@
 {% load staticfiles %}
 {% load blog_tags %}
+{% load notifications_tags %}
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -18,11 +19,11 @@
     <meta name="google-site-verification" content="DiMs9m8egbDyzbhH33-sFwnjVvcD-Z1RgLpJJOEZ0Co"/>
     <meta name="msvalidate.01" content="B0D0B9D2DA976F9B83E4C817E6300B8D"/>
 
+    <link rel="shortcut icon" href="{% static 'blog/images/icon/favicon.ico' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'blog/css/bootstrap.min.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'blog/css/nprogress.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'blog/css/style.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'blog/css/font-awesome.min.css' %}">
-    <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <script src="{% static 'blog/js/jquery-2.1.4.min.js' %}"></script>
     <script src="{% static 'blog/js/nprogress.js' %}"></script>
     <script src="{% static 'blog/js/jquery.lazyload.min.js' %}"></script>
@@ -45,7 +46,7 @@
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
                         data-target="#header-navbar" aria-expanded="false"><span class="sr-only"></span> <span
                         class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span></button>
-                <h1 class="logo hvr-bounce-in"><a href="{% url 'blog:index' %}" title="MYOAK博客首页"><img src="{% static 'blog/images/logo.png' %}" alt=""></a></h1>
+                <h1 class="logo hvr-bounce-in"><a href="{% url 'blog:index' %}" title="MYOAK博客首页"><img src="{% static 'blog/images/logo.png' %}" alt="MYOAK博客Logo" height="58px"></a></h1>
             </div>
             <div class="collapse navbar-collapse" id="header-navbar">
                 <ul class="nav navbar-nav navbar-left">
@@ -61,6 +62,7 @@
                             <button class="btn btn-basic dropdown-toggle user_option" hover-class="btn-hover" data-toggle="dropdown">{{ user.username }}
                             <span class="caret"></span></button>
                             <ul class="dropdown-menu">
+                              <li><a href="{% url 'notifications:all' %}">消息通知 <span class="badge">{% notifications_unread %}</span></a></li>
                               <li><a href="{% url 'password_change' %}?next={{ request.path }}">修改密码</a></li>
                               <li class="divider"></li>
                               <li><a href="{% url 'logout' %}?next={{ request.path }}">注销登录</a></li>
@@ -87,7 +89,7 @@
         <div class="content">
             <article class="excerpt-minic excerpt-minic-index" style="margin-top: 0">
                 <h2><span class="red">【杂谈】</span></h2>
-                <p class="note">本模主要是非技术文章的大杂烩，非本博客重点。</p>
+                <p class="note">本模块主要是非技术文章的大杂烩，非本博客重点。</p>
             </article>
                     <div class="new-article">
                     <ul class="nav nav-tabs" role="tablist">
@@ -182,24 +184,26 @@
                     <div role="tabpanel" class="tab-pane notice active" id="notice">
                         <ul>
                             <li>欢迎访问 MYOAK 博客!</li>
-                            <li><time datetime="2018-01-01">01-01</time><a href="{% url 'blog:index' %}#AI">模块【AI及大数据前沿】将更新近期的技术动向</a></li>
-                            <li><time datetime="2018-01-01">01-01</time>小提示：【Ctrl+D】收藏网站</li>
-                            <li><time datetime="2018-01-01">01-01</time><a href="{% url 'rss' %}">小提示：点击此链接进行RSS订阅</a></li>
+                            <li><time datetime="2018-01-01">01-08</time><a href="{% url 'blog:index' %}#AI">模块【AI及大数据前沿】将更新近期的技术动向</a></li>
+                            <li><time datetime="2018-01-01">01-08</time>小提示：【Ctrl+D】收藏网站</li>
+                            <li><time datetime="2018-01-01">01-08</time><a href="{% url 'rss' %}">小提示：点击此链接进行RSS订阅</a></li>
                         </ul>
                     </div>
                     <div role="tabpanel" class="tab-pane contact" id="statistics">
-                        <li>博客已运行&nbsp<span class="label label-default">{% get_blogtime %}</span>&nbsp天</li>
+                        <li>博客已运行&nbsp<span class="label label-default">{% get_blogtime 0 %}</span>&nbsp年&nbsp<span class="label label-default">{% get_blogtime 1 %}</span>&nbsp天</li>
                         <li>共计&nbsp<span class="label label-default">{% total_posts %}</span>&nbsp篇文章</li>
                         <li>文章总浏览量&nbsp<span class="label label-default">{% get_totalviews %}</span></li>
                         <li>博主已经&nbsp<span class="label label-default">{% days_noupdate %}</span>&nbsp天没有更新博客了！</li>
                     </div>
                     <div role="tabpanel" class="tab-pane contact" id="contact">
-                        <div>对机器学习，深度学习，大数据感兴趣的朋友可以加我QQ。讨论相关技术及其应用，相应产品开发，对应工作等问题。互相学习，共同进步。</div>
+                        <div>对机器学习，深度学习，大数据感兴趣的朋友可以加下方QQ群。讨论相关技术及其应用，相应产品开发，对应工作等问题。互相学习，共同进步。</div>
                         <div style="margin-top: 20px">
                         <ul class="social">
                             <li class="facebook"><a data-toggle="modal" data-target="#myQQ" rel="nofollow"><span><i class="fa fa-qq" aria-hidden="true"></i></span></a></li>
-                            <li class="twitter"><a href="https://github.com/OakSuen" target="_blank"><span class="ion-social-github"></span></a></li>
-                            <li class="twitter"><a href="mailto:695183616@qq.com"><span class="ion-email"></span></a></li>
+                            <li class="facebook"><a href="https://www.weibo.com/6490161310/profile?topnav=1&wvr=6&is_all=1" target="_blank"><span><i class="fa fa-weibo" aria-hidden="true"></i></span></a></li>
+                            <li class="facebook"><a href="https://twitter.com/Myoak6" target="_blank"><span><i class="fa fa-twitter" aria-hidden="true"></i></span></a></li>
+                            <li class="twitter"><a href="https://github.com/OakSuen" target="_blank"><span><i class="fa fa-github"></i></span></a></li>
+                            <li class="twitter"><a href="mailto:695183616@qq.com"><span><i class="fa fa-envelope"></i></span></a></li>
                         </ul>
                         </div>
                         </div>
@@ -210,7 +214,7 @@
 </section>
 <footer class="footer">
     <div class="container">
-        <p>Copyright &copy; 2017 <a href="">MYOAK</a></p>
+        <p>Copyright &copy; 2017-2018 <a href="">MYOAK</a></p>
     </div>
 </footer>
 <!--微信二维码模态框-->
@@ -222,8 +226,21 @@
                 </button>
                 <h4 class="modal-title" id="WeChatModalLabel" style="cursor:default;">QQ扫一扫</h4>
             </div>
-            <div class="modal-body" style="text-align:center"><img src="{% static 'blog/images/qrcode.jpg' %}" alt=""
+            <div class="modal-body" style="text-align:center"><img src="{% static 'blog/images/quncode.jpg' %}" alt=""
                                                                    style="cursor:pointer" width="200"/></div>
+        </div>
+    </div>
+</div>
+<!--Weibo二维码模态框-->
+<div class="modal fade user-select" id="myWeibo" tabindex="-1" role="dialog" aria-labelledby="WeChatModalLabel">
+    <div class="modal-dialog" role="document" style="margin-top:120px;max-width:340px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="WeChatModalLabel" style="cursor:default;">微博扫一扫</h4>
+            </div>
+            <div class="modal-body" style="text-align:center"><img src="{% static 'blog/images/weibo_qrcode.png' %}" alt="微博二维码" style="cursor:pointer" width="310"/></div>
         </div>
     </div>
 </div>
